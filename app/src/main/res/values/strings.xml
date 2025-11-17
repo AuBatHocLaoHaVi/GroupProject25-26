@@ -1,5 +1,25 @@
 <resources>
-    <string name="app_name">ClassroomScheduleManagementApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Course item -->
+    <string name="course_name">Calculus</string>
+    <string name="course_professor">Prof. A</string>
+    <string name="course_credits">4 credits</string>
+    <string name="enroll_button">Enroll</string>
+
+    <!-- All Courses screen -->
+    <string name="all_courses_title">All Courses</string>
+    <string name="search_course_hint">Search Course.....</string>
+    <string name="semester_default">All semester</string>
+
+    <string-array name="semesters_list">
+        <item>All semester</item>
+        <item>Semester 1</item>
+        <item>Semester 2</item>
+        <item>Semester 3</item>
+    </string-array>
+
+    <!-- UI labels -->
+    <string name="menu_icon_desc">Menu</string>
+    <string name="enrolled_status">Enrolled</string>
+
 </resources>
