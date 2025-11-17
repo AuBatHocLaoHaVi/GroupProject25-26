@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="#E5E5E5">
 
-    <!-- HEADER -->
     <androidx.cardview.widget.CardView
         android:id="@+id/header"
         android:layout_width="0dp"
@@ -47,8 +46,7 @@
                 android:src="@drawable/ic_logo" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
-
-    <!-- SEARCH BAR -->
+    
     <androidx.cardview.widget.CardView
         android:id="@+id/cardSearch"
         android:layout_width="0dp"
