@@ -4,6 +4,7 @@
     <string name="course_professor">Prof. A</string>
     <string name="course_credits">4 credits</string>
     <string name="enroll_button">Enroll</string>
+    <string name="detail_button">Detail</string>
 
     <string name="all_courses_title">All Courses</string>
     <string name="search_course_hint">Search Course.....</string>
