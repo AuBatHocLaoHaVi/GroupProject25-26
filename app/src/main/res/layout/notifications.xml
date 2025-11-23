@@ -43,12 +43,6 @@
                         android:src="@drawable/menu_icon"
                         app:tint="@android:color/white" />
 
-                    <ImageView
-                        android:id="@+id/ivLogo"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentEnd="true"
-                        android:src="@drawable/ic_logo" />
                 </RelativeLayout>
 
                 <!-- Title -->
