@@ -1,15 +1,37 @@
+#Android & Gradle Build
 *.iml
-.gradle
+.gradle/
 /local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
 /build
 /captures
 .externalNativeBuild
 .cxx
-local.properties
+.navigation/
+
+#Output App Files
+*.apk
+*.aab
+*.ap_
+*.aar
+
+#Android Studio
+/.idea/workspace.xml
+/.idea/tasks.xml
+/.idea/gradle.xml
+/.idea/assetWizardSettings.xml
+/.idea/dictionaries
+/.idea/libraries
+/.idea/caches
+/.idea/modules.xml
+/.idea/navEditor.xml
+/.idea/vcs.xml và 
+/.idea/codeStyles
+
+
+#FIREBASE
+# File này chứa thông tin kết nối, không nên public lên Github công khai
+google-services.json
+
+# --- Hệ điều hành (File rác) ---
+.DS_Store
+Thumbs.db
