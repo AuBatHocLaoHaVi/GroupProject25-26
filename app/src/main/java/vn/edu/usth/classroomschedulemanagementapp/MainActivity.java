@@ -10,8 +10,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 
-import vn.edu.usth.classroomschedulemanagementapp.R;
-
 // Đảm bảo bạn implement NavigationView.OnNavigationItemSelectedListener
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -22,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.student_activity_main);
 
 
         drawerLayout = findViewById(R.id.drawer_layout);

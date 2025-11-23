@@ -1,5 +1,5 @@
 <resources>
-
+    <string name="app_name">Classroom Schedule Management App</string>
     <string name="course_name">Calculus</string>
     <string name="course_professor">Prof. A</string>
     <string name="course_credits">4 credits</string>
