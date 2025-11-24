@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tvProfessor"
             android:layout_marginTop="2dp"
-            android:text="@string/course_credits"
+            android:text="4 credits"
             android:textSize="14sp" />
 
         <Button
@@ -44,10 +44,10 @@
             android:layout_height="40dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:text="@string/enroll_button"
+            android:text="enrol"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:backgroundTint="#0A2A57" />
+            android:backgroundTint="@color/deep_blue" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

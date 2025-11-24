@@ -3,58 +3,72 @@ package vn.edu.usth.classroomschedulemanagementapp;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.ImageButton; // Thêm import này
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.google.android.material.navigation.NavigationView;
 
-// Đảm bảo bạn implement NavigationView.OnNavigationItemSelectedListener
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class StudentMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
-    private ImageButton btnOpenDrawer; // Thêm nút của bạn
+    private ImageButton btnOpenDrawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.student_activity_main);
 
-
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
         btnOpenDrawer = findViewById(R.id.btn_menu);
 
-        // click mở drawer
         btnOpenDrawer.setOnClickListener(v -> {
             if (drawerLayout != null) {
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
-        // click
+
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Set default fragment
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CalendarFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_calender);
+        }
     }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.nav_calender) {
-            Toast.makeText(this, "Calendar", Toast.LENGTH_SHORT).show();
+            replaceFragment(new CalendarFragment());
         } else if (id == R.id.nav_all_courses) {
-            Toast.makeText(this, "All Courses", Toast.LENGTH_SHORT).show();
+            replaceFragment(new AllCoursesFragment());
         } else if (id == R.id.nav_my_courses) {
-            Toast.makeText(this, "My Courses", Toast.LENGTH_SHORT).show();
+            replaceFragment(new MyCoursesFragment());
         } else if (id == R.id.nav_notif) {
-            Toast.makeText(this, "Notification", Toast.LENGTH_SHORT).show();
+            replaceFragment(new NotificationsFragment());
         }
 
-        // Đóng drawer sau khi click
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-    // 6. Xử lý khi nhấn nút Back (Giữ nguyên, vẫn rất hữu ích)
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
+    }
+
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
