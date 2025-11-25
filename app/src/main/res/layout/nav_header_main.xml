@@ -7,7 +7,6 @@
     android:background="@color/deep_blue"
     android:orientation="vertical"
     android:padding="16dp"
-    android:fitsSystemWindows="true"
     >
 
     <LinearLayout
