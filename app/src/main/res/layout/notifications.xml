@@ -34,16 +34,7 @@
                 <!-- Top row: Menu icon + logo -->
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/ivMenu"
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
-                        android:src="@drawable/menu_icon"
-                        app:tint="@android:color/white" />
-
-                </RelativeLayout>
+                    android:layout_height="wrap_content"/>
 
                 <!-- Title -->
                 <TextView
@@ -82,6 +73,7 @@
                             android:id="@+id/etSearch"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginStart="0dp"
                             android:layout_toEndOf="@id/ivSearchIcon"
                             android:background="@android:color/transparent"
                             android:hint="@string/search_course_hint"
@@ -104,19 +96,11 @@
     <!-- Nội dung chính với Spinner + RecyclerView -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="714dp"
         android:orientation="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:paddingTop="16dp">
+        android:paddingTop="16dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Spinner chọn kỳ học -->
-        <Spinner
-            android:id="@+id/spSemester"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="16dp" />
 
         <!-- RecyclerView hiển thị các thông báo -->
         <androidx.recyclerview.widget.RecyclerView
@@ -124,9 +108,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:clipToPadding="false"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:clipToPadding="false"
             android:scrollbars="vertical" />
 
     </LinearLayout>
