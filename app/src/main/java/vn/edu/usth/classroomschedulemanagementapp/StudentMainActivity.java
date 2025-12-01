@@ -37,7 +37,7 @@ public class StudentMainActivity extends AppCompatActivity implements Navigation
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Set default fragment
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CalendarFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_calender);

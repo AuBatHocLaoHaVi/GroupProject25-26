@@ -33,8 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CalendarFragment extends Fragment {
-
-    // Views
     private CalendarView monthCalendarView;
     private WeekCalendarView weekCalendarView;
     private TextView tvMonthYear, tvDateSelected;
@@ -53,7 +51,6 @@ public class CalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
-        // Ánh xạ Views
         monthCalendarView = view.findViewById(R.id.calendarView);
         weekCalendarView = view.findViewById(R.id.weekCalendarView);
         tvMonthYear = view.findViewById(R.id.tvMonthYear);
@@ -63,13 +60,13 @@ public class CalendarFragment extends Fragment {
         cbToggle = view.findViewById(R.id.cbToggleWeekMonth);
         recyclerView = view.findViewById(R.id.recyclerViewSchedule);
 
-        // Setup RecyclerView & Data
+        //Setup RecyclerView & data
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ScheduleAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
         initFakeData();
 
-        // --- CẤU HÌNH LỊCH THÁNG ---
+        //lịch tháng
         class MonthDayViewContainer extends ViewContainer {
             TextView textView;
             View dotView, frameLayout;
@@ -103,7 +100,7 @@ public class CalendarFragment extends Fragment {
             }
         });
 
-        // --- CẤU HÌNH LỊCH TUẦN ---
+        //lịch tuần
         class WeekDayViewContainer extends ViewContainer {
             TextView textView;
             View dotView, frameLayout;
@@ -133,7 +130,7 @@ public class CalendarFragment extends Fragment {
             }
         });
 
-        // --- SETUP THỜI GIAN ---
+        //Setup time
         YearMonth currentMonth = YearMonth.now();
         YearMonth startMonth = currentMonth.minusMonths(24);
         YearMonth endMonth = currentMonth.plusMonths(24);
@@ -142,13 +139,13 @@ public class CalendarFragment extends Fragment {
         monthCalendarView.setup(startMonth, endMonth, DayOfWeek.MONDAY);
         monthCalendarView.scrollToMonth(currentMonth);
 
-        // Setup Week Calendar (Dùng LocalDate để setup)
+        // Setup Week Calendar (LocalDate)
         LocalDate startWeek = startMonth.atDay(1);
         LocalDate endWeek = endMonth.atEndOfMonth();
         weekCalendarView.setup(startWeek, endWeek, DayOfWeek.MONDAY);
         weekCalendarView.scrollToWeek(LocalDate.now());
 
-        // --- SỰ KIỆN SCROLL (ĐỂ CẬP NHẬT TIÊU ĐỀ THÁNG) ---
+        // update tháng
         monthCalendarView.setMonthScrollListener(calendarMonth -> {
             updateMonthHeader(calendarMonth.getYearMonth());
             return null;
@@ -161,56 +158,56 @@ public class CalendarFragment extends Fragment {
             return null;
         });
 
-        // --- XỬ LÝ CÁC NÚT BẤM ---
+        //button
 
-        // 1. Toggle Tuần/Tháng
+        //Change week button
         cbToggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) { // Chuyển sang Tuần
+            if (isChecked) {// = tuần
                 monthCalendarView.setVisibility(View.GONE);
                 weekCalendarView.setVisibility(View.VISIBLE);
                 weekCalendarView.scrollToWeek(selectedDate); // Đồng bộ vị trí
-            } else { // Chuyển sang Tháng
+            } else { // = tháng
                 weekCalendarView.setVisibility(View.GONE);
                 monthCalendarView.setVisibility(View.VISIBLE);
                 monthCalendarView.scrollToMonth(YearMonth.from(selectedDate)); // Đồng bộ vị trí
             }
         });
 
-        // 2. Nút Next/Previous (Xử lý logic cho cả 2 loại lịch)
+        // 2. Nút Next/Previous là +/-
         btnNext.setOnClickListener(v -> {
             if (monthCalendarView.getVisibility() == View.VISIBLE) {
-                // Logic cho tháng: +1 tháng
+                // cái này là để next 1 tháng
                 CalendarMonth current = monthCalendarView.findFirstVisibleMonth();
                 if (current != null) {
                     monthCalendarView.smoothScrollToMonth(current.getYearMonth().plusMonths(1));
                 }
             } else {
-                // Logic cho tuần: +1 tuần
+                // Này là + 1 tuần
                 weekCalendarView.smoothScrollToWeek(weekCalendarView.findFirstVisibleWeek().getDays().get(0).getDate().plusWeeks(1));
             }
         });
 
         btnPrev.setOnClickListener(v -> {
             if (monthCalendarView.getVisibility() == View.VISIBLE) {
-                // Logic cho tháng: -1 tháng
+                //-1 tháng
                 CalendarMonth current = monthCalendarView.findFirstVisibleMonth();
                 if (current != null) {
                     monthCalendarView.smoothScrollToMonth(current.getYearMonth().minusMonths(1));
                 }
             } else {
-                // Logic cho tuần: -1 tuần
+                //-1 tuần
                 weekCalendarView.smoothScrollToWeek(weekCalendarView.findFirstVisibleWeek().getDays().get(0).getDate().minusWeeks(1));
             }
         });
 
-        // Khởi tạo
+        //init
         selectDate(LocalDate.now());
         return view;
     }
 
-    // --- CÁC HÀM PHỤ TRỢ DÙNG CHUNG ---
+    //CÁC HÀM PHỤ TRỢ DÙNG CHUNG
 
-    // Hàm bind giao diện ngày (Dùng chung cho cả Tuần và Tháng để code gọn)
+    // Hàm bind giao diện ngày
     private void bindDayView(TextView textView, View frameLayout, View dotView, LocalDate date, boolean isCurrentMonth) {
         textView.setText(String.valueOf(date.getDayOfMonth()));
 
@@ -241,12 +238,12 @@ public class CalendarFragment extends Fragment {
 
     // Hàm chọn ngày
     private void selectDate(LocalDate date) {
-        if (selectedDate.equals(date)) return; // Tránh refresh nếu bấm lại ngày cũ
+        if (selectedDate.equals(date)) return; //ko cho refresh khi ấn ngày cũ
 
         LocalDate oldDate = selectedDate;
         selectedDate = date;
 
-        // Refresh cả 2 lịch để cập nhật vòng tròn tím
+        // Refresh cả 2 lịch
         monthCalendarView.notifyDateChanged(oldDate);
         monthCalendarView.notifyDateChanged(selectedDate);
         weekCalendarView.notifyDateChanged(oldDate);
@@ -270,15 +267,17 @@ public class CalendarFragment extends Fragment {
         }
     }
 
+
+    //data test
     private void initFakeData() {
         LocalDate today = LocalDate.now();
         List<Schedule> list1 = new ArrayList<>();
-        list1.add(new Schedule("OOP", "02:00 - 19:00", "Room 302"));
+        list1.add(new Schedule("OOP", "02:00 - 19:00", "A21 - Room 801"));
         database.put(today, list1);
 
         LocalDate tomorrow = today.plusDays(1);
         List<Schedule> list2 = new ArrayList<>();
-        list2.add(new Schedule("Calculus 1", "09:00 - 11:30", "A21- Auditorium"));
+        list2.add(new Schedule("Calculus 1", "09:00 - 11:30", "A21 - Auditorium"));
         database.put(tomorrow, list2);
     }
 }
