@@ -72,7 +72,6 @@
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- RECYCLER VIEW (KHÔNG DÙNG SCROLLVIEW NỮA) -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvCourse"
         android:layout_width="0dp"
