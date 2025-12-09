@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,10 +9,9 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/header"
         android:layout_width="0dp"
-        android:layout_height="180dp"
+        android:layout_height="200dp"
         app:cardBackgroundColor="#14345E"
         app:cardCornerRadius="0dp"
-        app:cardUseCompatPadding="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -19,16 +19,16 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingHorizontal="20dp"
-            android:paddingTop="24dp">
+            android:padding="20dp">
 
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Notification"
+                android:layout_marginTop="40dp"
+                android:text="Subjectname"
                 android:textColor="@android:color/white"
-                android:textSize="42sp"
+                android:textSize="54sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -38,51 +38,73 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:layout_alignParentBottom="true"
-                android:paddingBottom="12dp">
+                android:paddingBottom="16dp">
 
                 <TextView
-                    android:id="@+id/tabToday"
-                    android:layout_width="0dp"
+                    android:id="@+id/tabClasses"
+                    android:layout_width="wrap_content"
                     android:layout_height="36dp"
-                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="Today"
+                    android:paddingHorizontal="20dp"
+                    android:text="Classes"
+                    android:textColor="@android:color/white"
                     android:textSize="17sp"
                     android:textStyle="bold"
-                    android:textColor="@android:color/white"
-                    android:background="@drawable/tab_pill_active"
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackgroundBorderless" />
-
-                <TextView
-                    android:id="@+id/tabAll"
-                    android:layout_width="0dp"
-                    android:layout_height="36dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="All"
-                    android:textSize="17sp"
-                    android:textStyle="bold"
-                    android:textColor="@android:color/white"
                     android:background="@drawable/tab_pill_inactive"
+                    android:layout_marginEnd="20dp"
                     android:clickable="true"
                     android:foreground="?attr/selectableItemBackgroundBorderless" />
+
+                <TextView
+                    android:id="@+id/tabDocument"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:gravity="center"
+                    android:paddingHorizontal="20dp"
+                    android:text="Document"
+                    android:textColor="@android:color/white"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/tab_pill_active"
+                    android:layout_marginEnd="20dp"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless" />
+
+
             </LinearLayout>
 
         </RelativeLayout>
-
     </androidx.cardview.widget.CardView>
 
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerNotification"
+        android:id="@+id/recyclerDocument"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:paddingHorizontal="20dp"
         android:paddingTop="10dp"
         android:background="#E5E5E5"
-        app:layout_constraintTop_toBottomOf="@+id/header"
+        app:layout_constraintTop_toBottomOf="@id/header"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnAddDocument"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_margin="20dp"
+        android:backgroundTint="#14345E"
+        android:src="@drawable/ic_add_white"
+        app:tint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:borderWidth="0dp"
+        app:elevation="8dp"
+        app:compatElevation="8dp"
+        android:contentDescription="Add Document"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

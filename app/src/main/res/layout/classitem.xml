@@ -42,7 +42,7 @@
             android:layout_height="40dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:text="List"
+            android:text="Detail"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:backgroundTint="#0A2A57" />
