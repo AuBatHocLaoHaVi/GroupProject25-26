@@ -5,6 +5,9 @@ import java.util.List;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.GET;
+import vn.edu.usth.classroomschedulemanagementapp.Login.LoginRequest;
+import vn.edu.usth.classroomschedulemanagementapp.Student.AllCourse.Subject;
+
 public interface ApiService {
     // Đường dẫn này phải khớp với đường dẫn trong server.js
     @POST("/api/login")

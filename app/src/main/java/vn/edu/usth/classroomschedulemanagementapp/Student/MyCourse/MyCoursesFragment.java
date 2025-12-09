@@ -1,4 +1,4 @@
-package vn.edu.usth.classroomschedulemanagementapp;
+package vn.edu.usth.classroomschedulemanagementapp.Student.MyCourse;
 
 import android.os.Bundle;
 
@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import vn.edu.usth.classroomschedulemanagementapp.R;
 
 public class MyCoursesFragment extends Fragment {
 

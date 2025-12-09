@@ -1,4 +1,4 @@
-package vn.edu.usth.classroomschedulemanagementapp;
+package vn.edu.usth.classroomschedulemanagementapp.Student.AllCourse;
 
 import com.google.gson.annotations.SerializedName;
 

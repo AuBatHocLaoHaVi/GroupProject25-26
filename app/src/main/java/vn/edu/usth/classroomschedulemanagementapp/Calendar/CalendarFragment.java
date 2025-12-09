@@ -1,4 +1,4 @@
-package vn.edu.usth.classroomschedulemanagementapp;
+package vn.edu.usth.classroomschedulemanagementapp.Calendar;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -31,6 +31,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import vn.edu.usth.classroomschedulemanagementapp.R;
 
 public class CalendarFragment extends Fragment {
     private CalendarView monthCalendarView;

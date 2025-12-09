@@ -1,4 +1,4 @@
-package vn.edu.usth.classroomschedulemanagementapp;
+package vn.edu.usth.classroomschedulemanagementapp.Student.AllCourse;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -16,11 +16,13 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import vn.edu.usth.classroomschedulemanagementapp.R;
+import vn.edu.usth.classroomschedulemanagementapp.RetrofitClient;
 
 public class AllCoursesFragment extends Fragment {
 
     private RecyclerView rvCourses;
-    private CourseAdapter adapter;
+    private AllCourseAdapter adapter;
     private List<Subject> subjectList;
 
     public AllCoursesFragment() {
@@ -38,7 +40,7 @@ public class AllCoursesFragment extends Fragment {
 
         // 2. Khởi tạo list rỗng để tránh lỗi null
         subjectList = new ArrayList<>();
-        adapter = new CourseAdapter(getContext(), subjectList);
+        adapter = new AllCourseAdapter(getContext(), subjectList);
         rvCourses.setAdapter(adapter);
 
         // 3. Gọi API lấy dữ liệu
@@ -56,7 +58,6 @@ public class AllCoursesFragment extends Fragment {
                     subjectList.clear();
                     subjectList.addAll(response.body());
 
-                    // Thông báo cho Adapter cập nhật giao diện
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -64,7 +65,7 @@ public class AllCoursesFragment extends Fragment {
             @Override
             public void onFailure(Call<List<Subject>> call, Throwable t) {
                 Log.e("AllCourses", "Lỗi: " + t.getMessage());
-                Toast.makeText(getContext(), "Không tải được danh sách môn!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Can load subject list", Toast.LENGTH_SHORT).show();
             }
         });
     }

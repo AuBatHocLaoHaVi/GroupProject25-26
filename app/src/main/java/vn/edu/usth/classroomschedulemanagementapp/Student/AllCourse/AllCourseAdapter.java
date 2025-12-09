@@ -1,4 +1,4 @@
-package vn.edu.usth.classroomschedulemanagementapp;
+package vn.edu.usth.classroomschedulemanagementapp.Student.AllCourse;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,12 +10,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
-public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder> {
+import vn.edu.usth.classroomschedulemanagementapp.R;
+
+public class AllCourseAdapter extends RecyclerView.Adapter<AllCourseAdapter.CourseViewHolder> {
 
     private Context context;
     private List<Subject> subjectList;
 
-    public CourseAdapter(Context context, List<Subject> subjectList) {
+    public AllCourseAdapter(Context context, List<Subject> subjectList) {
         this.context = context;
         this.subjectList = subjectList;
     }

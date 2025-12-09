@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:padding="24dp"
     android:background="@drawable/main_background"
-    tools:context=".LoginActivity"
+    tools:context=".Login.LoginActivity"
     android:fitsSystemWindows="true">
 
     <TextView

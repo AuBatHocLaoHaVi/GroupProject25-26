@@ -1,10 +1,10 @@
-package vn.edu.usth.classroomschedulemanagementapp;
+package vn.edu.usth.classroomschedulemanagementapp.Student;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageButton;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -13,6 +13,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
+
+import vn.edu.usth.classroomschedulemanagementapp.Calendar.CalendarFragment;
+import vn.edu.usth.classroomschedulemanagementapp.NotificationsFragment;
+import vn.edu.usth.classroomschedulemanagementapp.R;
+import vn.edu.usth.classroomschedulemanagementapp.Student.AllCourse.AllCoursesFragment;
+import vn.edu.usth.classroomschedulemanagementapp.Student.MyCourse.MyCoursesFragment;
 
 public class StudentMainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
