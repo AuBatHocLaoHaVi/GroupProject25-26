@@ -26,13 +26,13 @@
 
 
         <TextView
-            android:id="@+id/tvClassTime"
+            android:id="@+id/tvMajor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvClassName"
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
-            android:text="Mon • 08:00 - 10:00 • Room 401"
+            android:text="ICT"
             android:textColor="#555"
             android:textSize="14sp" />
 
@@ -42,7 +42,7 @@
             android:layout_height="40dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:text="List"
+            android:text="Details"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:backgroundTint="#0A2A57" />

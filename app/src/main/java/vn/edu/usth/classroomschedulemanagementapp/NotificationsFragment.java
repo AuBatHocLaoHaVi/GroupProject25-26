@@ -17,6 +17,6 @@ public class NotificationsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.notifications_today, container, false);
+        return inflater.inflate(R.layout.notification, container, false);
     }
 }
