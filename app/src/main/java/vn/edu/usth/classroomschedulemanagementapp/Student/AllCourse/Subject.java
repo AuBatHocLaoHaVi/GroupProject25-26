@@ -12,20 +12,20 @@ public class Subject {
     @SerializedName("credits")
     private int credits;
 
-    @SerializedName("faculty")
-    private String faculty;
+    @SerializedName("lecturer")
+    private String lecturer;
 
     // Constructor
-    public Subject(String id, String name, int credits, String faculty) {
+    public Subject(String id, String name, int credits, String lecturer) {
         this.id = id;
         this.name = name;
         this.credits = credits;
-        this.faculty = faculty;
+        this.lecturer = lecturer;
     }
 
     // Getters
     public String getName() { return name; }
     public int getCredits() { return credits; }
-    public String getFaculty() { return faculty; }
+    public String getLecturer() { return lecturer; }
     public String getId() { return id; }
 }

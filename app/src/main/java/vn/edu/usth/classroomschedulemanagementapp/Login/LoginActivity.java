@@ -1,6 +1,8 @@
 package vn.edu.usth.classroomschedulemanagementapp.Login;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -11,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import vn.edu.usth.classroomschedulemanagementapp.Lecturer.LecturerMainActivity;
 import vn.edu.usth.classroomschedulemanagementapp.R;
 import vn.edu.usth.classroomschedulemanagementapp.RetrofitClient;
 import vn.edu.usth.classroomschedulemanagementapp.Student.StudentMainActivity;
@@ -25,14 +28,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_layout); // Đảm bảo tên file xml đúng
+        setContentView(R.layout.login_layout);
 
-        // 1. Ánh xạ View theo ID trong file login_layout.xml bạn gửi
         emailBox = findViewById(R.id.email_box);
         passwordBox = findViewById(R.id.password_box);
         loginButton = findViewById(R.id.login_button);
 
-        // 2. Xử lý sự kiện bấm nút Login
         loginButton.setOnClickListener(v -> handleLogin());
     }
 
@@ -40,17 +41,14 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailBox.getText().toString().trim();
         String password = passwordBox.getText().toString().trim();
 
-        // Kiểm tra nhập liệu
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Tạo request
+        // request
         LoginRequest request = new LoginRequest(email, password);
 
-        // Gọi API (Server trung gian kết nối Neon)
-        // Lưu ý: Bạn cần thay thế RetrofitClient bằng class bạn đã tạo ở bước trước
         RetrofitClient.getService().login(request).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -58,12 +56,17 @@ public class LoginActivity extends AppCompatActivity {
                     User user = response.body();
                     String role = user.getRole();
 
+                    SharedPreferences prefs = getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("USER_ID", user.getId());
+                    editor.putString("USER_NAME", user.getFullName());
+                    editor.apply();
+
                     Toast.makeText(LoginActivity.this, "Welcome " + user.getFullName(), Toast.LENGTH_SHORT).show();
 
                     navigateBasedOnRole(role);
 
                 } else {
-                    // Login thất bại (Sai pass hoặc email)
                     Toast.makeText(LoginActivity.this, "Login failed! Check credentials.", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -79,21 +82,19 @@ public class LoginActivity extends AppCompatActivity {
     private void navigateBasedOnRole(String role) {
         Intent intent;
 
-        // Kiểm tra Role khớp với Database (STUDENT / LECTURER)
         if ("STUDENT".equalsIgnoreCase(role)) {
-            // Chuyển sang màn hình StudentMainActivity mà bạn đã gửi
             intent = new Intent(LoginActivity.this, StudentMainActivity.class);
+
         } else if ("LECTURER".equalsIgnoreCase(role)) {
-            // Chuyển sang màn hình Giảng viên (Bạn cần tạo file này nếu chưa có)
-            // intent = new Intent(LoginActivity.this, LecturerMainActivity.class);
-            Toast.makeText(this, "Redirecting to Lecturer Screen...", Toast.LENGTH_SHORT).show();
-            return;
+            intent = new Intent(LoginActivity.this, LecturerMainActivity.class);
+
         } else {
-            Toast.makeText(this, "Unknown Role: " + role, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Who are you???!!!: " + role, Toast.LENGTH_SHORT).show();
             return;
         }
 
+
         startActivity(intent);
-        finish(); // Đóng LoginActivity để user không back lại được
+        finish();
     }
 }

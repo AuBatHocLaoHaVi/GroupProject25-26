@@ -71,10 +71,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <include layout="@layout/mycourseitem" />
-            <include layout="@layout/mycourseitem" />
-            <include layout="@layout/mycourseitem" />
-            <include layout="@layout/mycourseitem" />
+            <include layout="@layout/student_my_course_item" />
+            <include layout="@layout/student_my_course_item" />
+            <include layout="@layout/student_my_course_item" />
+            <include layout="@layout/student_my_course_item" />
 
         </LinearLayout>
     </ScrollView>

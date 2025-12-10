@@ -5,20 +5,16 @@ import com.google.gson.annotations.SerializedName;
 public class User {
     @SerializedName("id")
     private String id;
-
-    @SerializedName("email")
-    private String email;
-
     @SerializedName("fullName")
     private String fullName;
-
+    @SerializedName("email")
+    private String email;
     @SerializedName("role")
     private String role;
 
-    @SerializedName("studentCode")
-    private String studentCode;
 
-    // Getter
-    public String getRole() { return role; }
+
+    public String getId() { return id; }
     public String getFullName() { return fullName; }
+    public String getRole() { return role; }
 }
