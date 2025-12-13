@@ -15,17 +15,21 @@ public class Subject {
     @SerializedName("lecturer")
     private String lecturer;
 
-    // Constructor
-    public Subject(String id, String name, int credits, String lecturer) {
+    @SerializedName("isEnrolled")
+    private boolean isEnrolled;
+
+    public Subject(String id, String name, int credits, String lecturer, boolean isEnrolled) {
         this.id = id;
         this.name = name;
         this.credits = credits;
         this.lecturer = lecturer;
+        this.isEnrolled = isEnrolled;
     }
 
-    // Getters
     public String getName() { return name; }
     public int getCredits() { return credits; }
     public String getLecturer() { return lecturer; }
     public String getId() { return id; }
+    public boolean isEnrolled() { return isEnrolled; }
+    public void setEnrolled(boolean enrolled) { isEnrolled = enrolled; }
 }

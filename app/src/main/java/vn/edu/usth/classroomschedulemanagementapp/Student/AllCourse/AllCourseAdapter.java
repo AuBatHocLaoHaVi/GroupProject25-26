@@ -1,7 +1,6 @@
 package vn.edu.usth.classroomschedulemanagementapp.Student.AllCourse;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +22,12 @@ public class AllCourseAdapter extends RecyclerView.Adapter<AllCourseAdapter.Cour
 
     private Context context;
     private List<Subject> subjectList;
+    private String currentUserId;
 
-    public AllCourseAdapter(Context context, List<Subject> subjectList) {
+    public AllCourseAdapter(Context context, List<Subject> subjectList, String currentUserId) {
         this.context = context;
         this.subjectList = subjectList;
+        this.currentUserId = currentUserId;
     }
 
     @NonNull
@@ -43,70 +44,71 @@ public class AllCourseAdapter extends RecyclerView.Adapter<AllCourseAdapter.Cour
         holder.tvCourseName.setText(subject.getName());
         holder.tvCredits.setText("Credits: " + subject.getCredits());
         holder.tvProfessor.setText("Lecturer: " + subject.getLecturer());
+        holder.btnAction.setOnClickListener(null);
 
+        if (subject.isEnrolled()) {
+            // TRẠNG THÁI ĐÃ ENROLL
+            holder.btnAction.setText("Enrolled");
+            holder.btnAction.setEnabled(false);
 
-        holder.btnAction.setText("Enroll");
-        holder.btnAction.setEnabled(true);
-        holder.btnAction.setBackgroundColor(Color.parseColor("#0A2A57"));
+            // Set màu xám cho background
+            holder.btnAction.setBackgroundColor(Color.GRAY);
+            holder.btnAction.setTextColor(Color.WHITE);
+        } else {
+            holder.btnAction.setText("Enroll");
+            holder.btnAction.setEnabled(true);
 
-        // enroll
-        holder.btnAction.setOnClickListener(v -> {
-            enrollCourse(subject.getId(), holder.btnAction);
-        });
+            holder.btnAction.setBackgroundColor(Color.parseColor("#0A2A57"));
+            holder.btnAction.setTextColor(Color.WHITE);
+
+            holder.btnAction.setOnClickListener(v -> {
+                enrollCourse(subject, holder, position);
+            });
+        }
     }
 
-    private void enrollCourse(String subjectId, Button btn) {
-        //khóa nút
-        btn.setEnabled(false);
-        btn.setText("...");
+    private void enrollCourse(Subject subject, CourseViewHolder holder, int position) {
+        holder.btnAction.setEnabled(false);
+        holder.btnAction.setText("...");
 
-        //User ID
-        SharedPreferences prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
-        String userId = prefs.getString("USER_ID", null);
-
-        if (userId == null) {
-            Toast.makeText(context, "Please Login again!", Toast.LENGTH_SHORT).show();
-            btn.setEnabled(true);
-            btn.setText("Enroll");
+        if (currentUserId == null || currentUserId.isEmpty()) {
+            Toast.makeText(context, "Missing UserID", Toast.LENGTH_SHORT).show();
+            notifyItemChanged(position);
             return;
         }
 
-        //request
-        EnrollRequest request = new EnrollRequest(userId, subjectId);
+        EnrollRequest request = new EnrollRequest(currentUserId, subject.getId());
 
-        //call API
         RetrofitClient.getService().enrollAuto(request).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(context, "Enroll Success!", Toast.LENGTH_SHORT).show();
-                    btn.setText("Enrolled");
-                    btn.setBackgroundColor(Color.GRAY);
+                    //Cập nhật dữ liệu trong List
+                    subject.setEnrolled(true);
+                    notifyItemChanged(position);
                 } else {
                     try {
                         String errorBody = response.errorBody().string();
-                        Toast.makeText(context, "Error: " + errorBody, Toast.LENGTH_LONG).show();
+                        // Nếu server báo đã đăng ký rồi -> Cũng cập nhật thành Enrolled luôn
                         if (errorBody.toLowerCase().contains("already")) {
-                            btn.setText("Enrolled");
-                            btn.setBackgroundColor(Color.GRAY);
+                            Toast.makeText(context, "Already Enrolled!", Toast.LENGTH_SHORT).show();
+                            subject.setEnrolled(true);
+                            notifyItemChanged(position);
                         } else {
-                            btn.setEnabled(true);
-                            btn.setText("Enroll");
+                            Toast.makeText(context, "Failed: " + errorBody, Toast.LENGTH_SHORT).show();
+                            notifyItemChanged(position); // Reset lại nút về ban đầu
                         }
                     } catch (Exception e) {
-                        btn.setEnabled(true);
-                        btn.setText("Enroll");
-                        Toast.makeText(context, "Failed: " + response.code(), Toast.LENGTH_SHORT).show();
+                        notifyItemChanged(position);
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                // Lỗi mạng: Mở lại nút
-                btn.setEnabled(true);
-                btn.setText("Enroll");
-                Toast.makeText(context, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Network Error!", Toast.LENGTH_SHORT).show();
+                notifyItemChanged(position); // Reset lại nút nếu mất mạng
             }
         });
     }
@@ -115,6 +117,7 @@ public class AllCourseAdapter extends RecyclerView.Adapter<AllCourseAdapter.Cour
     public int getItemCount() {
         return subjectList != null ? subjectList.size() : 0;
     }
+
     public static class CourseViewHolder extends RecyclerView.ViewHolder {
         TextView tvCourseName, tvProfessor, tvCredits;
         Button btnAction;
@@ -124,7 +127,7 @@ public class AllCourseAdapter extends RecyclerView.Adapter<AllCourseAdapter.Cour
             tvCourseName = itemView.findViewById(R.id.tvCourseName);
             tvProfessor = itemView.findViewById(R.id.tvProfessor);
             tvCredits = itemView.findViewById(R.id.tvCredits);
-            btnAction = itemView.findViewById(R.id.btnAction);
+            btnAction = itemView.findViewById(R.id.btnAction); // Đảm bảo ID này đúng trong XML item
         }
     }
 }

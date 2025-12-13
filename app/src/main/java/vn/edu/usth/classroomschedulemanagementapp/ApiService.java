@@ -6,6 +6,7 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import vn.edu.usth.classroomschedulemanagementapp.Calendar.ScheduleResponse;
 import vn.edu.usth.classroomschedulemanagementapp.Login.LoginRequest;
 import vn.edu.usth.classroomschedulemanagementapp.Student.AllCourse.Subject;
@@ -17,6 +18,8 @@ public interface ApiService {
 
     @GET("/api/subjects")
     Call<List<Subject>> getSubjects();
+    @GET("/api/subjects")
+    Call<List<Subject>> getSubjects(@Query("userId") String userId);
 
     @POST("/api/enroll-auto")
     Call<Void> enrollAuto(@Body EnrollRequest request);

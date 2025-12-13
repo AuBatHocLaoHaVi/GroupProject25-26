@@ -37,7 +37,8 @@
             android:layout_marginTop="2dp"
             android:text="@string/course_credits"
             android:textSize="14sp" />
-        #<!-- text set trong adapter -->
+
+
         <Button
             android:id="@+id/btnAction"
             android:layout_width="90dp"
