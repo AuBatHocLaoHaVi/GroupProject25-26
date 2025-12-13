@@ -266,7 +266,8 @@ public class CalendarFragment extends Fragment {
                 Schedule schedule = new Schedule(
                         item.getSubjectName(),
                         timeString,
-                        item.getRoomName()
+                        item.getRoomName(),
+                        item.getLecturerName()
                 );
 
                 // Thêm vào Map

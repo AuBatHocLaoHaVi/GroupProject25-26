@@ -15,8 +15,15 @@ public class ScheduleResponse {
     @SerializedName("endTime")
     private String endTime;
 
+    // [THÊM MỚI] Khớp với key "lecturerName" trong server.js
+    @SerializedName("lecturerName")
+    private String lecturerName;
+
     public String getSubjectName() { return subjectName; }
     public String getRoomName() { return roomName; }
     public String getStartTime() { return startTime; }
     public String getEndTime() { return endTime; }
+
+    // [THÊM GETTER]
+    public String getLecturerName() { return lecturerName; }
 }

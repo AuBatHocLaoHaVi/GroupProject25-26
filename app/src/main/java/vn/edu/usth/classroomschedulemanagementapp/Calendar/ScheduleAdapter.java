@@ -7,7 +7,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
-
 import vn.edu.usth.classroomschedulemanagementapp.R;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder> {
@@ -18,7 +17,6 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         this.scheduleList = scheduleList;
     }
 
-    // Hàm cập nhật dữ liệu khi bấm ngày mới
     public void updateData(List<Schedule> newList) {
         this.scheduleList = newList;
         notifyDataSetChanged();
@@ -37,6 +35,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         holder.tvSubject.setText(item.subject);
         holder.tvTime.setText(item.time);
         holder.tvRoom.setText(item.room);
+        holder.tvLecturer.setText("Lecturer: " + item.lecturer);
     }
 
     @Override
@@ -45,12 +44,14 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvSubject, tvTime, tvRoom;
+        TextView tvSubject, tvTime, tvRoom, tvLecturer; // Khai báo thêm
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvSubject = itemView.findViewById(R.id.tvSubjectName);
             tvTime = itemView.findViewById(R.id.tvTime);
             tvRoom = itemView.findViewById(R.id.tvRoom);
+            tvLecturer = itemView.findViewById(R.id.tvLecturer);
         }
     }
 }
