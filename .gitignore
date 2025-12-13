@@ -1,7 +1,5 @@
 #Android & Gradle Build
-*.iml
 
-/local.properties
 
 /captures
 .externalNativeBuild
