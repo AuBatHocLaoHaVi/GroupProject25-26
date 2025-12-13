@@ -6,6 +6,7 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import vn.edu.usth.classroomschedulemanagementapp.Calendar.ScheduleResponse;
 import vn.edu.usth.classroomschedulemanagementapp.Login.LoginRequest;
 import vn.edu.usth.classroomschedulemanagementapp.Student.AllCourse.Subject;
 
@@ -22,4 +23,7 @@ public interface ApiService {
 
     @GET("/api/my-courses/{userId}")
     Call<List<Subject>> getMyCourses(@Path("userId") String userId);
+
+    @GET("/api/schedule/{userId}")
+    Call<List<ScheduleResponse>> getStudentSchedule(@Path("userId") String userId);
 }

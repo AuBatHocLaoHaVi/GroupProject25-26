@@ -1,5 +1,7 @@
 package vn.edu.usth.classroomschedulemanagementapp.Calendar;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -26,13 +29,19 @@ import com.kizitonwose.calendar.view.WeekDayBinder;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import vn.edu.usth.classroomschedulemanagementapp.ApiService;
 import vn.edu.usth.classroomschedulemanagementapp.R;
+import vn.edu.usth.classroomschedulemanagementapp.RetrofitClient;
 
 public class CalendarFragment extends Fragment {
     private CalendarView monthCalendarView;
@@ -45,6 +54,7 @@ public class CalendarFragment extends Fragment {
 
     // Data
     private LocalDate selectedDate = LocalDate.now();
+    // Map lưu trữ: Ngày -> Danh sách lịch học
     private HashMap<LocalDate, List<Schedule>> database = new HashMap<>();
 
     public CalendarFragment() {}
@@ -53,6 +63,7 @@ public class CalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
+        // Ánh xạ View
         monthCalendarView = view.findViewById(R.id.calendarView);
         weekCalendarView = view.findViewById(R.id.weekCalendarView);
         tvMonthYear = view.findViewById(R.id.tvMonthYear);
@@ -62,13 +73,12 @@ public class CalendarFragment extends Fragment {
         cbToggle = view.findViewById(R.id.cbToggleWeekMonth);
         recyclerView = view.findViewById(R.id.recyclerViewSchedule);
 
-        //Setup RecyclerView & data
+        // Setup RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new ScheduleAdapter(new ArrayList<>());
         recyclerView.setAdapter(adapter);
-        initFakeData();
 
-        //lịch tháng
+        // --- SETUP CALENDAR VIEW ---
         class MonthDayViewContainer extends ViewContainer {
             TextView textView;
             View dotView, frameLayout;
@@ -102,7 +112,6 @@ public class CalendarFragment extends Fragment {
             }
         });
 
-        //lịch tuần
         class WeekDayViewContainer extends ViewContainer {
             TextView textView;
             View dotView, frameLayout;
@@ -132,100 +141,169 @@ public class CalendarFragment extends Fragment {
             }
         });
 
-        //Setup time
+        // Setup time range
         YearMonth currentMonth = YearMonth.now();
         YearMonth startMonth = currentMonth.minusMonths(24);
         YearMonth endMonth = currentMonth.plusMonths(24);
 
-        // Setup Month Calendar
         monthCalendarView.setup(startMonth, endMonth, DayOfWeek.MONDAY);
         monthCalendarView.scrollToMonth(currentMonth);
 
-        // Setup Week Calendar (LocalDate)
         LocalDate startWeek = startMonth.atDay(1);
         LocalDate endWeek = endMonth.atEndOfMonth();
         weekCalendarView.setup(startWeek, endWeek, DayOfWeek.MONDAY);
         weekCalendarView.scrollToWeek(LocalDate.now());
 
-        // update tháng
+        // Listeners scroll
         monthCalendarView.setMonthScrollListener(calendarMonth -> {
             updateMonthHeader(calendarMonth.getYearMonth());
             return null;
         });
 
         weekCalendarView.setWeekScrollListener(week -> {
-            // Lấy ngày đầu tiên của tuần để hiện tháng
             LocalDate firstDate = week.getDays().get(0).getDate();
             updateMonthHeader(YearMonth.from(firstDate));
             return null;
         });
 
-        //button
-
-        //Change week button
+        // Toggle Week/Month
         cbToggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {// = tuần
+            if (isChecked) {
                 monthCalendarView.setVisibility(View.GONE);
                 weekCalendarView.setVisibility(View.VISIBLE);
-                weekCalendarView.scrollToWeek(selectedDate); // Đồng bộ vị trí
-            } else { // = tháng
+                weekCalendarView.scrollToWeek(selectedDate);
+            } else {
                 weekCalendarView.setVisibility(View.GONE);
                 monthCalendarView.setVisibility(View.VISIBLE);
-                monthCalendarView.scrollToMonth(YearMonth.from(selectedDate)); // Đồng bộ vị trí
+                monthCalendarView.scrollToMonth(YearMonth.from(selectedDate));
             }
         });
 
-        // 2. Nút Next/Previous là +/-
+        // Navigation Buttons
         btnNext.setOnClickListener(v -> {
             if (monthCalendarView.getVisibility() == View.VISIBLE) {
-                // cái này là để next 1 tháng
                 CalendarMonth current = monthCalendarView.findFirstVisibleMonth();
                 if (current != null) {
                     monthCalendarView.smoothScrollToMonth(current.getYearMonth().plusMonths(1));
                 }
             } else {
-                // Này là + 1 tuần
                 weekCalendarView.smoothScrollToWeek(weekCalendarView.findFirstVisibleWeek().getDays().get(0).getDate().plusWeeks(1));
             }
         });
 
         btnPrev.setOnClickListener(v -> {
             if (monthCalendarView.getVisibility() == View.VISIBLE) {
-                //-1 tháng
                 CalendarMonth current = monthCalendarView.findFirstVisibleMonth();
                 if (current != null) {
                     monthCalendarView.smoothScrollToMonth(current.getYearMonth().minusMonths(1));
                 }
             } else {
-                //-1 tuần
                 weekCalendarView.smoothScrollToWeek(weekCalendarView.findFirstVisibleWeek().getDays().get(0).getDate().minusWeeks(1));
             }
         });
 
-        //init
+        // Initial Selection
         selectDate(LocalDate.now());
+
+        // GỌI API LẤY DỮ LIỆU THẬT
+        fetchScheduleFromApi();
+
         return view;
     }
 
-    //CÁC HÀM PHỤ TRỢ DÙNG CHUNG
+    // --- HÀM GỌI API ---
+    private void fetchScheduleFromApi() {
+        SharedPreferences prefs = requireActivity().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
+        String userId = prefs.getString("USER_ID", "");
 
-    // Hàm bind giao diện ngày
+        if (userId.isEmpty()) {
+            Toast.makeText(getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ApiService apiService = RetrofitClient.getService();
+        apiService.getStudentSchedule(userId).enqueue(new Callback<List<ScheduleResponse>>() {
+            @Override
+            public void onResponse(Call<List<ScheduleResponse>> call, Response<List<ScheduleResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    processScheduleData(response.body());
+                } else {
+                    Toast.makeText(getContext(), "Failed to load schedule", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ScheduleResponse>> call, Throwable t) {
+                Toast.makeText(getContext(), "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Xử lý dữ liệu trả về từ server và đưa vào HashMap
+    private void processScheduleData(List<ScheduleResponse> rawList) {
+        database.clear(); // Xóa dữ liệu cũ
+
+        // Định dạng ngày giờ từ Server (ISO 8601)
+        // Ví dụ: 2023-12-14T08:00:00.000Z
+        DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_DATE_TIME;
+
+        // Định dạng hiển thị giờ (HH:mm)
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        for (ScheduleResponse item : rawList) {
+            try {
+                // Parse chuỗi ngày giờ
+                LocalDateTime startDateTime = LocalDateTime.parse(item.getStartTime(), isoFormatter);
+                LocalDateTime endDateTime = LocalDateTime.parse(item.getEndTime(), isoFormatter);
+
+                // Lấy ngày (LocalDate) để làm Key cho HashMap
+                LocalDate dateKey = startDateTime.toLocalDate();
+
+                // Tạo chuỗi hiển thị giờ: "08:00 - 10:00"
+                String timeString = startDateTime.format(timeFormatter) + " - " + endDateTime.format(timeFormatter);
+
+                // Tạo đối tượng Schedule (để hiển thị lên RecyclerView)
+                Schedule schedule = new Schedule(
+                        item.getSubjectName(),
+                        timeString,
+                        item.getRoomName()
+                );
+
+                // Thêm vào Map
+                if (!database.containsKey(dateKey)) {
+                    database.put(dateKey, new ArrayList<>());
+                }
+                database.get(dateKey).add(schedule);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Sau khi xử lý xong, refresh lại giao diện lịch và list
+        monthCalendarView.notifyCalendarChanged();
+        weekCalendarView.notifyCalendarChanged();
+        updateAdapterForDate(selectedDate); // Update list cho ngày đang chọn
+    }
+
+    // --- CÁC HÀM UI ---
+
     private void bindDayView(TextView textView, View frameLayout, View dotView, LocalDate date, boolean isCurrentMonth) {
         textView.setText(String.valueOf(date.getDayOfMonth()));
 
         if (isCurrentMonth) {
             textView.setTextColor(Color.BLACK);
 
-            // Check Selected
+            // Highlight ngày được chọn
             if (date.equals(selectedDate)) {
-                frameLayout.setBackgroundResource(R.drawable.ic_dot);
+                frameLayout.setBackgroundResource(R.drawable.ic_dot); // Hoặc background tròn màu xanh
                 frameLayout.getBackground().setTint(getResources().getColor(R.color.deep_blue, null));
                 textView.setTextColor(Color.WHITE);
             } else {
                 frameLayout.setBackground(null);
             }
 
-            // Check Dot
+            // Hiển thị chấm đỏ nếu có lịch học
             if (database.containsKey(date)) {
                 dotView.setVisibility(View.VISIBLE);
             } else {
@@ -238,20 +316,17 @@ public class CalendarFragment extends Fragment {
         }
     }
 
-    // Hàm chọn ngày
     private void selectDate(LocalDate date) {
-        if (selectedDate.equals(date)) return; //ko cho refresh khi ấn ngày cũ
+        if (selectedDate.equals(date)) return;
 
         LocalDate oldDate = selectedDate;
         selectedDate = date;
 
-        // Refresh cả 2 lịch
         monthCalendarView.notifyDateChanged(oldDate);
         monthCalendarView.notifyDateChanged(selectedDate);
         weekCalendarView.notifyDateChanged(oldDate);
         weekCalendarView.notifyDateChanged(selectedDate);
 
-        // Cập nhật list
         updateAdapterForDate(selectedDate);
     }
 
@@ -267,19 +342,5 @@ public class CalendarFragment extends Fragment {
         } else {
             adapter.updateData(new ArrayList<>());
         }
-    }
-
-
-    //data test
-    private void initFakeData() {
-        LocalDate today = LocalDate.now();
-        List<Schedule> list1 = new ArrayList<>();
-        list1.add(new Schedule("OOP", "02:00 - 19:00", "A21 - Room 801"));
-        database.put(today, list1);
-
-        LocalDate tomorrow = today.plusDays(1);
-        List<Schedule> list2 = new ArrayList<>();
-        list2.add(new Schedule("Calculus 1", "09:00 - 11:30", "A21 - Auditorium"));
-        database.put(tomorrow, list2);
     }
 }
