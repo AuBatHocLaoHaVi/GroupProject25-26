@@ -5,19 +5,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import vn.edu.usth.classroomschedulemanagementapp.R;
-import vn.edu.usth.classroomschedulemanagementapp.Student.AllCourse.Subject; // Import đúng model
+import vn.edu.usth.classroomschedulemanagementapp.Student.AllCourse.Subject;
 
 public class MyCoursesAdapter extends RecyclerView.Adapter<MyCoursesAdapter.CourseViewHolder> {
 
     private final List<Subject> courseList;
+    private final OnItemClickListener listener; // 1. Khai báo listener
 
-    public MyCoursesAdapter(List<Subject> courseList) {
+    // 2. Tạo Interface để Fragment implements
+    public interface OnItemClickListener {
+        void onDetailClick(Subject subject);
+    }
+
+    // 3. Cập nhật Constructor để nhận listener
+    public MyCoursesAdapter(List<Subject> courseList, OnItemClickListener listener) {
         this.courseList = courseList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -31,14 +39,17 @@ public class MyCoursesAdapter extends RecyclerView.Adapter<MyCoursesAdapter.Cour
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
         Subject subject = courseList.get(position);
 
-        // hiển thị dữ liệu từ Server
         holder.tvCourseName.setText(subject.getName());
         holder.tvCredits.setText("Credits: " + subject.getCredits());
         holder.tvProfessor.setText("Lecturer: " + subject.getLecturer());
 
         holder.btnAction.setText("Detail");
+
+        // 4. Bắt sự kiện click và truyền ra ngoài
         holder.btnAction.setOnClickListener(v -> {
-            Toast.makeText(v.getContext(), "Xem chi tiết môn: " + subject.getName(), Toast.LENGTH_SHORT).show();
+            if (listener != null) {
+                listener.onDetailClick(subject);
+            }
         });
     }
 
