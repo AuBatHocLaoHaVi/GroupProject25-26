@@ -1,6 +1,6 @@
 #Android & Gradle Build
 
-
+.local.properties
 /captures
 .externalNativeBuild
 .cxx
