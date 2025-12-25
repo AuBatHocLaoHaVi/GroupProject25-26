@@ -6,7 +6,6 @@
     android:orientation="vertical"
     android:background="@android:color/white">
 
-    <!-- HEADER (THÊM MỚI, KHÔNG XOÁ GÌ CŨ) -->
     <androidx.cardview.widget.CardView
         android:id="@+id/headerCalendar"
         android:layout_width="match_parent"

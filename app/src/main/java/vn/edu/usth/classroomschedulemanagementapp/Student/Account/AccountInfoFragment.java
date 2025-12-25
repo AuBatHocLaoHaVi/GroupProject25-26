@@ -1,11 +1,13 @@
 package vn.edu.usth.classroomschedulemanagementapp.Student.Account;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -20,6 +22,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vn.edu.usth.classroomschedulemanagementapp.R;
 import vn.edu.usth.classroomschedulemanagementapp.RetrofitClient;
+import vn.edu.usth.classroomschedulemanagementapp.Login.LoginActivity;
 
 public class AccountInfoFragment extends Fragment {
 
@@ -27,6 +30,8 @@ public class AccountInfoFragment extends Fragment {
     private RecyclerView rcvGrades;
     private GradeAdapter adapter;
     private List<StudentGrade> gradeList;
+    private Button btnLogout;
+
 
     @Nullable
     @Override
@@ -37,6 +42,7 @@ public class AccountInfoFragment extends Fragment {
         tvStudentCode = view.findViewById(R.id.tvStudentCode);
         tvMajor = view.findViewById(R.id.tvMajor);
         rcvGrades = view.findViewById(R.id.rcvGrades);
+        btnLogout = view.findViewById(R.id.btnLogout);
 
         rcvGrades.setLayoutManager(new LinearLayoutManager(getContext()));
         gradeList = new ArrayList<>();
@@ -44,9 +50,16 @@ public class AccountInfoFragment extends Fragment {
         rcvGrades.setAdapter(adapter);
 
         fetchData();
+        btnLogout.setOnClickListener(v -> performLogout());
         return view;
     }
+    private void performLogout() {
+        if (getActivity() == null) return;
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
 
+    }
     private void fetchData() {
         SharedPreferences prefs = getActivity().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
         String userId = prefs.getString("USER_ID", "");
