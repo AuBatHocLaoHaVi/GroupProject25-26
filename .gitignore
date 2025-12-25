@@ -1,15 +1,30 @@
-#Android & Gradle Build
-
-
+# --- Android / Gradle ---
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
 /captures
 .externalNativeBuild
 .cxx
-.navigation/
+/app/build
 
-
-#FIREBASE
+# --- Google Services ---
 google-services.json
 
-# --- Hệ điều hành (File rác) ---
-.DS_Store
-Thumbs.db
+# --- Android Studio ---
+*.jks
+*.keystore
+*.key
+
+# --- Backend / Node.js ---
+node_modules/
+npm-debug.log
+yarn-error.log
+.env
