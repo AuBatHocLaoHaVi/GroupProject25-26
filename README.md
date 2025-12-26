@@ -1,28 +1,42 @@
-# Classroom Schedule Management
-![Platform Android](https://img.shields.io/badge/Platform-Android-3DDC84?style=flat&logo=android&logoColor=white)
-![Platform Web](https://img.shields.io/badge/Platform-Web_Admin-blue?style=flat&logo=google-chrome&logoColor=white)
-![Database](https://img.shields.io/badge/Database-PostgreSQL_(Neon)-336791?style=flat&logo=postgresql&logoColor=white)
-![Firebase](https://img.shields.io/badge/Service-Firebase_FCM-FFCA28?style=flat&logo=firebase&logoColor=white)
-![Status](https://img.shields.io/badge/Project-Graduation_Thesis-red)
-## Introduction
-**Classroom Schedule Management** is a software solution designed to optimize the management of class schedules, lecturers, and students. Developed as a **Graduation Thesis**, this project focuses on resolving schedule conflicts and providing real-time updates for schedule changes.
+# Classroom Schedule Management App (Android Client)
 
-The system consists of two main modules:
-1. **Mobile App (Android):** For Students and Lecturers to enrol courses, view schedules,  and receive notifications.
-2.  **Web Portal:** For Academic Assistants to arrange schedules and manage data.
+A comprehensive Android application designed for **University of Science and Technology of Hanoi (USTH)** students and lecturers to manage academic schedules, course enrollments, and attendance efficiently.
 
-## Key Features
+## 📱 Project Overview
 
-### For Students & Lecturers (Android App)
-- [x] **Role-based Authentication:** Automatically directs users to the correct interface based on their role (Student/Lecturer).
-- [x] **Schedule View:** Displays class schedules by Week/Month with an intuitive UI.
-- [x] **Enrol Course:** Provide course for Student to enrol
-- [ ] **Assigned Course:** View the list of assigned course for Student and Lecturer and able to see course the course document and attendance
-- [ ] **Real-time Notifications:** Receives Push Notifications (via Firebase Cloud Messaging) when a class is cancelled or a room is changed.
+This is a native Android application built with **Java**. It follows a Client-Server architecture where the Android app acts as the client, communicating with a Node.js backend via RESTful APIs. The app features a role-based authentication system separating **Students** and **Lecturers** functionalities.
 
-### For Academic Assistants
-- []
+## ✨ Key Features
 
-## Tech Stack
-| Component | Technology | Details |
+### 🎓 For Students
+* **Smart Calendar:** View weekly/monthly class schedules with visual indicators for upcoming classes.
+* **Course Enrollment:** Browse available subjects and self-enroll in classes. The app handles "Enrolled" status logic to prevent duplicate registrations.
+* **My Courses:** View list of enrolled courses and access detailed information like attendance history.
+* **Academic Results:** View grades, student ID, and major information.
 
+### 👨‍🏫 For Lecturers
+* **Teaching Schedule:** View assigned classes and room locations on the calendar.
+* **Class Dashboard:** Manage specific class details (Room, Time, Documents).
+
+---
+
+## 🛠 Tech Stack
+
+The project utilizes modern Android development standards and libraries:
+
+* **Language:** Java (JDK 11).
+* **Minimum SDK:** API 24 (Android 7.0) | **Target SDK:** API 36.
+* **Networking:**
+    * **Retrofit 2:** Type-safe HTTP client for API calls.
+    * **GSON:** JSON serialization/deserialization.
+* **UI Components:**
+    * **Material Design 3:** For modern UI elements.
+    * **Kizitonwose Calendar View:** A highly customizable calendar library for handling complex schedule views.
+    * **ConstraintLayout & RecyclerView:** For responsive layouts and list rendering.
+    * **Navigation Drawer:** For main application navigation.
+
+---
+
+## 📂 Project Architecture
+
+The codebase is organized by **Features** to ensure scalability and maintainability:
