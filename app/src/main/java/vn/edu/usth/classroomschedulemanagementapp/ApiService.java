@@ -40,4 +40,18 @@ public interface ApiService {
 
     @GET("/api/attendance")
     Call<List<Attendance>> getAttendance(@Query("classId") String classId, @Query("studentId") String studentId);
+    @POST("/api/document")
+    Call<Void> uploadDocument(@Body DocumentRequest request);
+
+    class DocumentRequest {
+        String courseName;
+        String title;
+        String url;
+
+        public DocumentRequest(String courseName, String title, String url) {
+            this.courseName = courseName;
+            this.title = title;
+            this.url = url;
+        }
+    }
 }
