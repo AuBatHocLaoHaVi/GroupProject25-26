@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5">
@@ -31,7 +32,7 @@
             android:id="@+id/tvDetailTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Course Detail"
+            android:text="Course Details"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold"/>
@@ -42,7 +43,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:cardCornerRadius="12dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
         app:layout_constraintTop_toBottomOf="@id/headerDetail">
 
         <LinearLayout
@@ -51,19 +53,61 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <TextView
-                android:text="Documents"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Documents"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000"
+                    android:layout_centerVertical="true"/>
+
+                <LinearLayout
+                    android:id="@+id/btnAddDoc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/bg_button_add_outline"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="6dp">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_add"
+                        app:tint="#14345E"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="Add"
+                        android:textColor="#14345E"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvDocuments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
             <TextView
+                android:id="@+id/tvNoDocs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="No documents uploaded yet."
-                android:layout_marginTop="8dp"
                 android:textColor="#666"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -86,7 +130,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvAttTitle"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        tools:layout_editor_absoluteX="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

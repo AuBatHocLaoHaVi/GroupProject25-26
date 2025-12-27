@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@android:color/white">
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_menu_camera"
+        app:tint="#14345E"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Study Material"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#14345E"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textStyle="bold"
+        android:textSize="13sp"
+        android:textColor="#555"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/edtDocTitle"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:hint="e.g. Week 1: Introduction to Java"
+        android:background="@drawable/bg_input_field"
+        android:paddingHorizontal="16dp"
+        android:textSize="15sp"
+        android:textColor="#333"
+        android:inputType="text"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Material Link (URL)"
+        android:textStyle="bold"
+        android:textSize="13sp"
+        android:textColor="#555"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/edtDocUrl"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:hint="Paste Google Drive or Web link here"
+        android:background="@drawable/bg_input_field"
+        android:paddingHorizontal="16dp"
+        android:textSize="15sp"
+        android:textColor="#333"
+        android:inputType="textUri"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Make sure the link is accessible to students."
+        android:textSize="12sp"
+        android:textColor="#888"
+        android:layout_marginBottom="12dp"/>
+
+</LinearLayout>
