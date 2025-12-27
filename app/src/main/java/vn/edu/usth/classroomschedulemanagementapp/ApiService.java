@@ -14,19 +14,18 @@ import vn.edu.usth.classroomschedulemanagementapp.Student.MyCourse.CourseDetail.
 import vn.edu.usth.classroomschedulemanagementapp.Student.Account.UserProfile;
 import vn.edu.usth.classroomschedulemanagementapp.Student.Account.StudentGrade;
 
-
-
 public interface ApiService {
-    // đường dẫn phải khớp với đường dẫn trong server.js( very quan trọng!!!)
     @POST("/api/login")
     Call<User> login(@Body LoginRequest request);
+
     @GET("/api/profile/{userId}")
     Call<UserProfile> getProfile(@Path("userId") String userId);
 
     @GET("/api/grades/{studentId}")
     Call<List<StudentGrade>> getGrades(@Path("studentId") String studentId);
-    @GET("/api/subjects")
-    Call<List<Subject>> getSubjects();
+
+    // --- SỬA DÒNG NÀY ---
+    // Gọi API subject có truyền userId để check trạng thái enroll
     @GET("/api/subjects")
     Call<List<Subject>> getSubjects(@Query("userId") String userId);
 
@@ -41,5 +40,4 @@ public interface ApiService {
 
     @GET("/api/attendance")
     Call<List<Attendance>> getAttendance(@Query("classId") String classId, @Query("studentId") String studentId);
-
 }

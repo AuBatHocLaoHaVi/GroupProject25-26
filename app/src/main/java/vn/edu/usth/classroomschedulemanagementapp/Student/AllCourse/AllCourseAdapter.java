@@ -7,27 +7,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import vn.edu.usth.classroomschedulemanagementapp.EnrollRequest;
 import vn.edu.usth.classroomschedulemanagementapp.R;
-import vn.edu.usth.classroomschedulemanagementapp.RetrofitClient;
 
 public class AllCourseAdapter extends RecyclerView.Adapter<AllCourseAdapter.CourseViewHolder> {
 
     private Context context;
     private List<Subject> subjectList;
-    private String currentUserId;
+    private OnItemClickListener listener;
 
-    public AllCourseAdapter(Context context, List<Subject> subjectList, String currentUserId) {
+    public interface OnItemClickListener {
+        void onItemClick(Subject subject, int position);
+    }
+
+    public AllCourseAdapter(Context context, List<Subject> subjectList, OnItemClickListener listener) {
         this.context = context;
         this.subjectList = subjectList;
-        this.currentUserId = currentUserId;
+        this.listener = listener;
     }
 
     @NonNull
@@ -42,75 +40,25 @@ public class AllCourseAdapter extends RecyclerView.Adapter<AllCourseAdapter.Cour
         Subject subject = subjectList.get(position);
 
         holder.tvCourseName.setText(subject.getName());
+        holder.tvProfessor.setText("Lecturer: " + (subject.getLecturer() != null ? subject.getLecturer() : "TBA"));
         holder.tvCredits.setText("Credits: " + subject.getCredits());
-        holder.tvProfessor.setText("Lecturer: " + subject.getLecturer());
-        holder.btnAction.setOnClickListener(null);
 
-        if (subject.isEnrolled()) {
-            // TRẠNG THÁI ĐÃ ENROLL
-            holder.btnAction.setText("Enrolled");
-            holder.btnAction.setEnabled(false);
+        // --- SỬA ĐỔI TẠI ĐÂY ---
+        // Luôn hiển thị nút là Detail để người dùng bấm vào xem thông tin
+        // Không kiểm tra isEnrolled ở đây để khóa nút nữa
+        holder.btnAction.setText("Detail");
+        holder.btnAction.setBackgroundColor(Color.parseColor("#0A2A57")); // Màu xanh
+        holder.btnAction.setEnabled(true); // Luôn cho phép bấm
 
-            // Set màu xám cho background
-            holder.btnAction.setBackgroundColor(Color.GRAY);
-            holder.btnAction.setTextColor(Color.WHITE);
-        } else {
-            holder.btnAction.setText("Enroll");
-            holder.btnAction.setEnabled(true);
-
-            holder.btnAction.setBackgroundColor(Color.parseColor("#0A2A57"));
-            holder.btnAction.setTextColor(Color.WHITE);
-
-            holder.btnAction.setOnClickListener(v -> {
-                enrollCourse(subject, holder, position);
-            });
-        }
-    }
-
-    private void enrollCourse(Subject subject, CourseViewHolder holder, int position) {
-        holder.btnAction.setEnabled(false);
-        holder.btnAction.setText("...");
-
-        if (currentUserId == null || currentUserId.isEmpty()) {
-            Toast.makeText(context, "Missing UserID", Toast.LENGTH_SHORT).show();
-            notifyItemChanged(position);
-            return;
-        }
-
-        EnrollRequest request = new EnrollRequest(currentUserId, subject.getId());
-
-        RetrofitClient.getService().enrollAuto(request).enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    Toast.makeText(context, "Enroll Success!", Toast.LENGTH_SHORT).show();
-                    //Cập nhật dữ liệu trong List
-                    subject.setEnrolled(true);
-                    notifyItemChanged(position);
-                } else {
-                    try {
-                        String errorBody = response.errorBody().string();
-                        // Nếu server báo đã đăng ký rồi -> Cũng cập nhật thành Enrolled luôn
-                        if (errorBody.toLowerCase().contains("already")) {
-                            Toast.makeText(context, "Already Enrolled!", Toast.LENGTH_SHORT).show();
-                            subject.setEnrolled(true);
-                            notifyItemChanged(position);
-                        } else {
-                            Toast.makeText(context, "Failed: " + errorBody, Toast.LENGTH_SHORT).show();
-                            notifyItemChanged(position); // Reset lại nút về ban đầu
-                        }
-                    } catch (Exception e) {
-                        notifyItemChanged(position);
-                    }
-                }
+        // Sự kiện Click: Mở BottomSheet
+        View.OnClickListener clickListener = v -> {
+            if (listener != null) {
+                listener.onItemClick(subject, position);
             }
+        };
 
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(context, "Network Error!", Toast.LENGTH_SHORT).show();
-                notifyItemChanged(position); // Reset lại nút nếu mất mạng
-            }
-        });
+        holder.btnAction.setOnClickListener(clickListener);
+        holder.itemView.setOnClickListener(clickListener);
     }
 
     @Override
@@ -127,7 +75,7 @@ public class AllCourseAdapter extends RecyclerView.Adapter<AllCourseAdapter.Cour
             tvCourseName = itemView.findViewById(R.id.tvCourseName);
             tvProfessor = itemView.findViewById(R.id.tvProfessor);
             tvCredits = itemView.findViewById(R.id.tvCredits);
-            btnAction = itemView.findViewById(R.id.btnAction); // Đảm bảo ID này đúng trong XML item
+            btnAction = itemView.findViewById(R.id.btnStudentCourseDetail);
         }
     }
 }

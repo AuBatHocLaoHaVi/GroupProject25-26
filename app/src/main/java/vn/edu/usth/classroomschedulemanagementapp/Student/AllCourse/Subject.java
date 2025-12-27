@@ -15,14 +15,18 @@ public class Subject {
     @SerializedName("lecturer")
     private String lecturer;
 
+    @SerializedName("description")
+    private String description;
+
     @SerializedName("isEnrolled")
     private boolean isEnrolled;
 
-    public Subject(String id, String name, int credits, String lecturer, boolean isEnrolled) {
+    public Subject(String id, String name, int credits, String lecturer, String description, boolean isEnrolled) {
         this.id = id;
         this.name = name;
         this.credits = credits;
         this.lecturer = lecturer;
+        this.description = description;
         this.isEnrolled = isEnrolled;
     }
 
@@ -30,6 +34,9 @@ public class Subject {
     public int getCredits() { return credits; }
     public String getLecturer() { return lecturer; }
     public String getId() { return id; }
+
+    // Getter mới
+    public String getDescription() { return description; }
     public boolean isEnrolled() { return isEnrolled; }
     public void setEnrolled(boolean enrolled) { isEnrolled = enrolled; }
 }
