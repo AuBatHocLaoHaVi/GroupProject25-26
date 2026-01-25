@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/bg_bottom_sheet"> <View
+    android:layout_width="40dp"
+    android:layout_height="4dp"
+    android:layout_gravity="center"
+    android:layout_marginBottom="16dp"
+    android:background="#DDDDDD" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New student"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#14345E"
+        android:layout_marginBottom="24dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilStudentName"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Student name"
+        app:boxStrokeColor="#14345E"
+        app:hintTextColor="#14345E"
+        app:startIconDrawable="@android:drawable/ic_menu_edit">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etStudentName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btnConfirmAdd"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="24dp"
+        android:text="ADD STUDENT"
+        android:backgroundTint="#14345E"
+        android:textColor="@android:color/white"
+        app:cornerRadius="12dp" />
+
+</LinearLayout>

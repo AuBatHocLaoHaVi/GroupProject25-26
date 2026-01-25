@@ -264,10 +264,12 @@ public class CalendarFragment extends Fragment {
 
                 // Tạo đối tượng Schedule (để hiển thị lên RecyclerView)
                 Schedule schedule = new Schedule(
+                        item.getScheduleId(),
                         item.getSubjectName(),
                         timeString,
                         item.getRoomName(),
-                        item.getLecturerName()
+                        item.getLecturerName(),
+                        item.getStartTime()
                 );
 
                 // Thêm vào Map

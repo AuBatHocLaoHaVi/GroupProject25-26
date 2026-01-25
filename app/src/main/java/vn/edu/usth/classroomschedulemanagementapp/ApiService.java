@@ -24,8 +24,6 @@ public interface ApiService {
     @GET("/api/grades/{studentId}")
     Call<List<StudentGrade>> getGrades(@Path("studentId") String studentId);
 
-    // --- SỬA DÒNG NÀY ---
-    // Gọi API subject có truyền userId để check trạng thái enroll
     @GET("/api/subjects")
     Call<List<Subject>> getSubjects(@Query("userId") String userId);
 
@@ -40,6 +38,18 @@ public interface ApiService {
 
     @GET("/api/attendance")
     Call<List<Attendance>> getAttendance(@Query("classId") String classId, @Query("studentId") String studentId);
+    @GET("/api/students/search")
+    Call<List<StudentSearchResponse>> searchStudents(@Query("name") String name);
+
+    @GET("/api/attendance/{scheduleId}")
+    Call<List<StudentAttendanceInfo>> getAttendanceRecords(@Path("scheduleId") String scheduleId);
+
+    @POST("/api/attendance/submit")
+    Call<Void> submitAttendance(@Body AttendanceSubmission submission);
+    @POST("/api/attendance/remove-students")
+    Call<Void> removeStudents(@Body DeleteRequest request);
+    @POST("/api/attendance/add-student")
+    Call<Void> addStudentToClass(@Body AddStudentRequest request);
     @POST("/api/document")
     Call<Void> uploadDocument(@Body DocumentRequest request);
 
@@ -52,6 +62,59 @@ public interface ApiService {
             this.courseName = courseName;
             this.title = title;
             this.url = url;
+        }
+    }
+
+    class StudentSearchResponse {
+        public String id;
+        public String fullName;
+        public String studentCode;
+    }
+
+    class StudentAttendanceInfo {
+        public String attendanceId;  // Added missing field
+        public String studentId;
+        public String id;
+        public String fullName;
+        public String studentCode;
+        public String status = "Present";
+    }
+
+    class AttendanceSubmission {
+        public String scheduleId;
+        public List<AttendanceRecordJson> records;
+
+        public AttendanceSubmission(String scheduleId, List<AttendanceRecordJson> records) {
+            this.scheduleId = scheduleId;
+            this.records = records;
+        }
+    }
+
+    class AttendanceRecordJson {
+        String studentId;
+        String status;
+
+        public AttendanceRecordJson(String studentId, String status) {
+            this.studentId = studentId;
+            this.status = status;
+        }
+    }
+    class DeleteRequest {
+        public String scheduleId;
+        public List<String> studentIds;
+
+        public DeleteRequest(String scheduleId, List<String> studentIds) {
+            this.scheduleId = scheduleId;
+            this.studentIds = studentIds;
+        }
+    }
+    class AddStudentRequest {
+        public String scheduleId;
+        public String studentId;
+
+        public AddStudentRequest(String scheduleId, String studentId) {
+            this.scheduleId = scheduleId;
+            this.studentId = studentId;
         }
     }
 }

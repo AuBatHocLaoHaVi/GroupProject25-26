@@ -8,36 +8,57 @@
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:padding="16dp">
 
         <TextView
             android:id="@+id/tvSubjectName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@id/btnViewAttendance"
+            android:layout_marginEnd="12dp"
             android:text="Subject Name"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/deep_blue"/>
 
         <TextView
+            android:id="@+id/btnViewAttendance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:text="View Attendance"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="@color/deep_blue"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="8dp"
+            android:background="@drawable/bg_button_toggle"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
             android:id="@+id/tvLecturer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/tvSubjectName"
             android:text="Lecturer Name"
             android:textSize="14sp"
             android:textColor="#555555"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="6dp"
             android:textStyle="italic"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/tvLecturer"
             android:orientation="horizontal"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="12dp">
 
             <TextView
                 android:id="@+id/tvTime"
@@ -56,5 +77,5 @@
                 android:text="Room 801"
                 android:textStyle="bold"/>
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>
